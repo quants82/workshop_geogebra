@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoGebra for Physics Teaching</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #ff6b35 0%, #1e90ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(0px) translateX(-10px); }
+            75% { transform: translateY(20px) translateX(5px); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+            transition: all 0.3s ease;
+            animation: slideInUp 1s ease-out 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255,107,53,0.6);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Schedule Info */
+        .schedule {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: slideInUp 1s ease-out 0.6s both;
+        }
+
+        .schedule h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .schedule-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            color: white;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background: linear-gradient(135deg, rgba(30,144,255,0.05) 0%, rgba(255,107,53,0.05) 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #ff6b35, #1e90ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #ff6b35;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ff6b35, #1e90ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        /* Teacher Section */
+        .teacher-section {
+            background: linear-gradient(135deg, #1e90ff 0%, #ff6b35 100%);
+            color: white;
+        }
+
+        .teacher-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .teacher-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto;
+            border: 5px solid rgba(255,255,255,0.2);
+        }
+
+        .teacher-avatar__img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .teacher-info h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Benefits Section */
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .benefit-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .benefit-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff6b35, #1e90ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Registration Section */
+        .registration {
+            background: linear-gradient(135deg, #ff6b35 0%, #1e90ff 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 -10px 50px rgba(255,107,53,0.3);
+        }
+
+        .registration::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .registration .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .price-highlight {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #ffff00, #ffffff, #ffff00);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 2s ease-in-out infinite, pulse 1.5s ease-in-out infinite;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 1rem 2rem;
+            display: inline-block;
+            position: relative;
+        }
+
+        .price-highlight::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #ffff00, #ff6b35, #1e90ff, #ffff00);
+            border-radius: 25px;
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .registration-form {
+            background: linear-gradient(135deg, rgba(255,107,53,0.95) 0%, rgba(30,144,255,0.95) 100%);
+            backdrop-filter: blur(15px);
+            padding: 2.5rem;
+            border-radius: 25px;
+            margin: 2rem auto;
+            max-width: 600px;
+            border: 3px solid rgba(255,255,255,0.6);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: glow 2s ease-in-out infinite alternate;
+            position: relative;
+            color: white;
+        }
+
+        .registration-form::before {
+            content: '🔥 HOT 🔥';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #ff0000, #ff6b35);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 20px rgba(255,107,53,0.3), 0 0 40px rgba(30,144,255,0.3); }
+            100% { box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 30px rgba(255,107,53,0.5), 0 0 60px rgba(30,144,255,0.5); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .payment-info {
+            background: rgba(255,255,255,0.2);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            border: 2px solid rgba(255,255,255,0.4);
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .payment-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: sweep 3s ease-in-out infinite;
+        }
+
+        @keyframes sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* QR Code Styles */
+        .qr-container {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .qr-code {
+            max-width: 200px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin: 1rem auto;
+            display: block;
+        }
+
+        .qr-title {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes flash {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.7; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .teacher-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .qr-code {
+                max-width: 150px;
+            }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: floatRandom 15s ease-in-out infinite;
+        }
+
+        .floating-1 {
+            top: 10%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: #ff6b35;
+            animation-delay: 0s;
+        }
+
+        .floating-2 {
+            top: 70%;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+            background: #1e90ff;
+            animation-delay: 5s;
+        }
+
+        .floating-3 {
+            bottom: 20%;
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            background: #ff8c42;
+            animation-delay: 10s;
+        }
+
+        @keyframes floatRandom {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -30px) rotate(90deg); }
+            50% { transform: translate(-20px, 20px) rotate(180deg); }
+            75% { transform: translate(20px, -10px) rotate(270deg); }
+        }
+
+        /* Video section */
+        .video-container {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .video-placeholder {
+            background: linear-gradient(45deg, #ff6b35, #1e90ff);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-element floating-1"></div>
+        <div class="floating-element floating-2"></div>
+        <div class="floating-element floating-3"></div>
+        
+        <div class="hero-content">
+            <h1>GeoGebra for Physics Teaching</h1>
+            <p>Workshop cơ bản và chuyên sâu về ứng dụng GeoGebra trong dạy học vật lí</p>
+            
+            <div class="schedule">
+                <h3>📅 Thông tin workshop</h3>
+                <div class="schedule-details">
+                    <div>
+                        <strong>⏰ Thời gian:</strong><br>
+                        20:00 - 22:00
+                    </div>
+                    <div>
+                        <strong>📆 Ngày:</strong><br>
+                        Thứ Bảy, 02/8/2025
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#registration" class="cta-button">🚀 Đăng ký ngay</a>
+        </div>
+    </section>
+
+    <!-- GeoGebra Introduction -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Tính năng của GeoGebra</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📊</div>
+                    <h3>Vẽ đồ cơ bản và nâng cao</h3>
+                    <p>Tạo mọi loại đồ thị Vật lí với khả năng tương tác cao, cho phép học sinh khám phá các mối quan hệ một cách trực quan.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Công cụ đa dạng</h3>
+                    <p>Tích hợp calculator, geometry, spreadsheet và 3D graphics trong một ứng dụng duy nhất.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Mô phỏng thực tế</h3>
+                    <p>Tạo một số mô phỏng Vật lí với chuyển động, lực và các hiện tượng khó quan sát, các hiện tượng không thể làm thí nghiệm.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teacher Section -->
+    <section class="section teacher-section">
+        <div class="container">
+            <div class="teacher-content">
+                <div class="teacher-image">
+                    <img 
+                        src="https://raw.githubusercontent.com/quants82/pythonfromzero/main/hinh_tui.jpg" 
+                        alt="Ảnh đại diện của Thầy Trần Quốc Quân"
+                        class="teacher-avatar__img"
+                        loading="lazy"
+                    >
+                </div>
+                <div class="teacher-info">
+                    <h3>Thầy Trần Quốc Quân</h3>
+                    <p>Giảng viên có nhiều năm kinh nghiệm trong việc ứng dụng công nghệ giáo dục, chuyên gia về GeoGebra và phương pháp dạy học Vật lí hiện đại.</p>
+                    <ul style="margin-top: 1rem; list-style: none;">
+                        <li>✅ 20 năm kinh nghiệm giảng dạy Vật lí</li>
+                        <li>✅ Có nhiều kinh nghiệm trong sử dụng Geogebra cho vật lí</li>
+                        <li>✅ Tác giả phần mềm PMaker </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Lợi ích của GeoGebra trong dạy học Vật lí</h2>
+            <div class="benefits-list">
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">👁️</div>
+                    <div>
+                        <h4>Trực quan hóa hiện tượng</h4>
+                        <p>Biến những khái niệm trừu tượng thành hình ảnh sinh động</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">🔬</div>
+                    <div>
+                        <h4>Mô phỏng thí nghiệm</h4>
+                        <p>Thực hiện các thí nghiệm khó thực hiện trong thực tế</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">📱</div>
+                    <div>
+                        <h4>Tương tác cao</h4>
+                        <p>Học sinh tham gia tích cực vào quá trình học tập</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">💡</div>
+                    <div>
+                        <h4>Hiểu bản chất</h4>
+                        <p>Giải thích các hiện tượng không thể quan sát trực tiếp</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Content -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Nội dung WorkShop</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📈</div>
+                    <h3>Kỹ thuật vẽ đồ thị cơ bản & nâng cao bằng Geogebra</h3>
+                    <p>Nắm vững các công cụ vẽ đồ thị, từ cơ bản đến nâng cao trong vật lí</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🌊</div>
+                    <h3>Mô phỏng hiện tượng Vật lí</h3>
+                    <p>Tạo các mô phỏng sóng, dao động, chuyển động, điện từ trường và các hiện tượng khó thực hiện thí nghiệm.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Giải thích bản chất hiện tượng</h3>
+                    <p>Sử dụng GeoGebra để làm sáng tỏ các hiện tượng không thể quan sát trực tiếp bằng mắt thường.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Ứng dụng trong dạy học</h3>
+                    <p>Phương pháp tích hợp GeoGebra vào các bài giảng Vật lí từ cơ bản đến nâng cao một cách hiệu quả.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Video minh họa</h2>
+            <div class="video-container">
+                <div class="video-placeholder">
+                    🎥 Video demo sẽ được cập nhật<br>
+                    <small>Xem trước các mô phỏng GeoGebra trong dạy học Vật lí</small>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+                    <div style="flex: 1 1 350px; max-width: 500px;">
+                        <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius: 20px; box-shadow: 0 8px 32px rgba(102,126,234,0.12);">
+                            <iframe src="https://www.youtube.com/embed/MovZ5nsfegk?si=mfCWHZsJpgnwrGfU" title="Mô phỏng con lắc lò xo thẳng đứng" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+                        </div>
+                    </div>
+                    <div style="flex: 1 1 350px; max-width: 500px;">
+                        <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius: 20px; box-shadow: 0 8px 32px rgba(102,126,234,0.12);">
+                            <iframe src="https://www.youtube.com/embed/FxGRcLh-Css?si=n1I8t7Dt-cW9Uopl" title="Mô phỏng sự truyền sóng điện từ" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+                        </div>
+                    </div>
+                    <div style="flex: 1 1 350px; max-width: 500px;">
+                        <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius: 20px; box-shadow: 0 8px 32px rgba(102,126,234,0.12);">
+                            <iframe src="https://www.youtube.com/embed/H0NvsEPuYf8?si=Hy2x0xFFp-O2c8Ud" title="Mô phỏng hiệu ứng Doppler và Sóng xung kích ở máy bay siêu thanh" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Benefits -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Lợi ích khi tham gia WorkShop</h2>
+            <div class="benefits-list">
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">📁</div>
+                    <div>
+                        <h4>Tặng bộ file GeoGebra</h4>
+                        <p>Nhận ngay bộ file GeoGebra đã làm sẵn</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">🤝</div>
+                    <div>
+                        <h4>Đồng hành cả năm học</h4>
+                        <p>Hỗ trợ ý tưởng về Geogebra trong năm học 2025-2026</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">💬</div>
+                    <div>
+                        <h4>Cộng đồng giáo viên</h4>
+                        <p>Tham gia nhóm chia sẻ kinh nghiệm và sản phẩm Geogebra</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">🎯</div>
+                    <div>
+                        <h4>Nâng cao chất lượng dạy học</h4>
+                        <p>Tăng tính tương tác và hiệu quả trong các tiết học Vật lí</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section id="registration" class="section registration">
+        <div class="container">
+            <h2 class="section-title" style="color: white; text-shadow: 3px 3px 6px rgba(0,0,0,0.5); font-size: 3rem;">Đăng ký tham gia</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 2rem; animation: flash 2s ease-in-out infinite; color: #ffff00; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                ⚡ CHỈ DÀNH CHO 99GV ĐĂNG KÝ ĐẦU TIÊN ⚡
+            </p>
+            
+            <div class="price-highlight">
+                💰 PHÍ CAM KẾT 99K VNĐ
+            </div>
+            
+            <div class="registration-form">
+                <h3 style="margin-bottom: 1.5rem; color: white; position: relative; z-index: 3; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Hướng dẫn đăng ký</h3>
+                <div class="payment-info">
+                    <h4 style="color: white; position: relative; z-index: 3; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">📱 Quét mã QR thanh toán</h4>
+                    
+                    <!-- QR Code Section -->
+                    <div class="qr-container">
+                        <div class="qr-title">Quét mã QR để thanh toán 99K</div>
+                        <img 
+                            src="https://raw.githubusercontent.com/quants82/pythonfromzero/main/qr_99k.png" 
+                            alt="Mã QR thanh toán 99K VNĐ" 
+                            class="qr-code"
+                            loading="lazy"
+                        >
+                        <div style="color: #333; font-size: 0.9rem; margin-top: 1rem;">
+                            Mở app ngân hàng và quét mã QR
+                        </div>
+                    </div>
+                    
+                    <p style="margin: 1rem 0; color: white; position: relative; z-index: 3; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        <strong>Cú pháp chuyển khoản:</strong><br>
+                        <code style="background: rgba(0,0,0,0.6); padding: 0.5rem; border-radius: 5px; display: inline-block; margin-top: 0.5rem; color: #ffff00; font-weight: bold; border: 1px solid rgba(255,255,255,0.3);">
+                            Họ-Tên-Điện-Thoại-Geogebra
+                        </code>
+                    </p>
+                    <p style="color: white; position: relative; z-index: 3; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"><strong>Ví dụ:</strong> NguyenVanA-0123456789-geogebra</p>
+                </div>
+                
+                <div style="margin-top: 2rem; color: white; position: relative; z-index: 3; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                    <p>📞 <strong>Hỗ trợ:</strong> Liên hệ Zalo: 0978531191</p>
+                    <p>🌐 <strong>Tham khảo thêm:</strong></p>
+                    <a href="https://quants82.github.io/workshop_geogebra/" 
+                       style="color: #ffff00; text-decoration: underline; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"
+                       target="_blank">
+                        quants82.github.io/pythonfromzero/
+                    </a>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(45deg, rgba(30,144,255,0.9) 0%, rgba(255,107,53,0.9) 100%); border-radius: 15px; border: 3px solid rgba(255,255,255,0.6); color: white;">
+                <h4 style="color: #ffff00; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 1.3rem;">🎁 Quà tặng đặc biệt</h4>
+                <ul style="list-style: none; margin-top: 1rem; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                    <li style="margin-bottom: 0.5rem;">✅ Bộ file GeoGebra hoàn chỉnh</li>
+                    <li style="margin-bottom: 0.5rem;">✅ Hướng dẫn chi tiết từng bước</li>
+                    <li style="margin-bottom: 0.5rem;">✅ Hỗ trợ trực tuyến cả năm</li>
+                    <li style="margin-bottom: 0.5rem;">✅ Cập nhật tài liệu mới nhất</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with fade-in class
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add parallax effect to floating elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelectorAll('.floating-element');
+            
+            parallax.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.1);
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
